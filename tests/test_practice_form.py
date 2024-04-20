@@ -1,149 +1,174 @@
-from selene import browser, be, have, by, command
+from ozby_test.model.pages.cart_page import OzCartPage
+from ozby_test.model.pages.catalog_page import OzCatalogPage
+from ozby_test.model.pages import OzFavoritesPage
+from ozby_test.model.pages.item_page import OzItemPage
+from ozby_test.model.pages.main_page import OzMainPage
+from ozby_test.model.pages.personal_data_page import OzPersonalDataPage
+from ozby_test.model.pages.authorization_page import OzAuthorizationPage
+from ozby_test.model.pages import OzRegistrationPage
+from ozby_test.model.pages import OzSearchResultsPage
 
-from model.pages.authorization_page import OzAuthorizationPage
-from model.pages.main_page import OzMainPage
-from model.pages.personal_data_page import OzPersonalDataPage
-from model.pages.registration_page import OzRegistrationPage
 
-
-def test_phone_register():
+def test_phone_registration():
     main_page = OzMainPage()
     registration_page = OzRegistrationPage()
     personal_data_page = OzPersonalDataPage()
-
     main_page.open()
+
     main_page.open_registration_page()
-    registration_page.fill_registration_phone("445821620")
-    registration_page.submit_registration_and_enter()
+    registration_page.phone_register_and_enter("445821620")
     main_page.open_personal_data_page()
+
     personal_data_page.should_have_user_phone("445821620")
 
 
 def test_email_authorization():
-    browser.open("/")
-    browser.element("div.user-bar__item>a").click()
-    browser.element("#loginFormLoginEmailLink").click()
-    browser.element("#loginForm [type='email']").should(be.blank).type("test_oz_001@gmail.com")
-    browser.element("#loginForm [type='password']").should(be.blank).type("h34Duz")
-    browser.element("#loginForm [type='submit']").click()
-    browser.element("div.user-bar__item>a[href='/personal/orders/']").should(be.visible).hover()
-    browser.element("a[href='/personal']").click()
-    browser.element(".l-row-user-name h1").should(have.exact_text("oz_test"))
-    browser.element(".l-row-user-name p").should(have.exact_text("User Test"))
+    main_page = OzMainPage()
+    auth_page = OzAuthorizationPage()
+    personal_data_page = OzPersonalDataPage()
+    main_page.open()
+
+    main_page.open_authorization_page()
+    auth_page.authorize_user("test_oz_001@gmail.com", "h34Duz")
+    main_page.open_personal_data_page()
+
+    personal_data_page.should_have_user_data(
+        "test_oz_001@gmail.com",
+        "User",
+        "Test",
+        "443322111"
+    )
 
 
 def test_log_out():
-    pass
+    main_page = OzMainPage()
+    auth_page = OzAuthorizationPage()
+    main_page.open()
+
+    main_page.open_authorization_page()
+    auth_page.authorize_user("test_oz_001@gmail.com", "h34Duz")
+    main_page.user_log_out()
+
+    main_page.should_have_user_logout()
 
 
 def test_search_items():
-    browser.open("/")
-    browser.element("#top-s").type("Django").press_enter()
-    browser.element("span.digi-products__quantity").should(have.exact_text("5"))
-    browser.all("a.digi-product__label").should(have.exact_texts(
-        ["Django 3.0. Практика создания веб-сайтов на Python",
-         "Python, Django и Bootstrap для начинающих",
-         "Django 2 в примерах",
-         "Django 4. Практика создания веб-сайтов на Python",
-         "Python, Django и PyCharm для начинающих"]
-    ))
+    main_page = OzMainPage()
+    search_result_page = OzSearchResultsPage()
+    main_page.open()
+
+    main_page.search_item("Django")
+    search_result_page.should_have_search_results("5",
+                                                  ['Django 3.0. Практика создания веб-сайтов на Python',
+                                                   'Django 2 в примерах',
+                                                   'Python, Django и Bootstrap для начинающих',
+                                                   'Django 4. Практика создания веб-сайтов на Python',
+                                                   'Python, Django и PyCharm для начинающих'])
 
 
 def test_filter_search_result():
-    browser.open("/")
-    browser.element("#top-s").should(be.blank).type("Python").press_enter()
-    browser.element("[name='max']").should(be.blank).type("30")
-    browser.element("span.digi-filters__item").wait_until(be.visible)
-    browser.all("span.digi-facet-option__text").element_by(have.text("BHV")).perform(
-        command.js.scroll_into_view).click()
-    browser.all("span.digi-facet-option__text").element_by(have.text("2023")).perform(
-        command.js.scroll_into_view).click()
-    browser.all("span.digi-filters__item-value").should(have.texts(["0 - 30", "BHV", "2023"]))
-    browser.element("a.digi-product__label").should(have.exact_text("Python. 12 уроков для начинающих"))
+    main_page = OzMainPage()
+    search_result_page = OzSearchResultsPage()
+    main_page.open()
+
+    main_page.search_item("Python")
+    search_result_page.set_price_range("0", "30")
+    search_result_page.enable_search_filter("BHV")
+    search_result_page.enable_search_filter("2023")
+
+    search_result_page.should_have_filters_active("0 - 30", "BHV", "2023")
+    search_result_page.should_have_search_results(product_labels=["Python. 12 уроков для начинающих"])
 
 
 def test_navigate_catalog():
-    browser.open("/")
-    browser.element(by.text("Книги")).click()
-    browser.element("//span[text()='Нехудожественная литература']/parent::div").click()
-    browser.element(by.text("Компьютеры и Интернет")).click()
-    browser.element(by.text("Книги про компьютерные игры")).click()
-    browser.all(".breadcrumbs__list__item>span").should(
-        have.exact_texts(["OZ", "Книги", "Нехудожественная литература", "Компьютеры и Интернет"]))
-    browser.element(".breadcrumbs__list__li>span").should(have.exact_text("Книги про компьютерные игры"))
+    main_page = OzMainPage()
+    catalog_page = OzCatalogPage()
+    main_page.open()
+
+    main_page.navigate_to_category("Книги",
+                                   "Нехудожественная литература",
+                                   "Компьютеры и Интернет",
+                                   "Книги про компьютерные игры")
+    catalog_page.should_have_catalog_path("Книги",
+                                          "Нехудожественная литература",
+                                          "Компьютеры и Интернет",
+                                          "Книги про компьютерные игры")
 
 
 def test_cart_add_item():
-    browser.open("/")
-    browser.element("div.user-bar__item>a").click()
-    browser.element("#loginFormLoginEmailLink").click()
-    browser.element("#loginForm [type='email']").should(be.blank).type("test_oz_001@gmail.com")
-    browser.element("#loginForm [type='password']").should(be.blank).type("h34Duz")
-    browser.element("#loginForm [type='submit']").click()
+    main_page = OzMainPage()
+    auth_page = OzAuthorizationPage()
+    search_results_page = OzSearchResultsPage()
+    cart_page = OzCartPage()
+    item_page = OzItemPage()
+    main_page.open()
 
-    browser.element("#top-s").type("Эффективное тестирование")
-    browser.element(by.partial_text("Эффективное тестирование")).click()
-    browser.element(".addtocart-btn").click()
+    main_page.open_authorization_page()
+    auth_page.authorize_user("test_oz_001@gmail.com", "h34Duz")
+    main_page.search_item("Эффективное тестирование")
+    search_results_page.open_item_page("Эффективное тестирование")
+    item_page.add_current_item_to_favorites()
 
-    browser.element(".user-bar__cart").click()
-    browser.element(".goods-table-cell__line_title").should(
-        have.text("Эффективное тестирование программного обеспечения"))
-    browser.element(".deal-form").should(be.present)
+    main_page.open_cart_page()
+    cart_page.should_have_items_added("Эффективное тестирование")
+
+    cart_page.remove_all_items()
 
 
 def test_cart_remove_item():
-    browser.open("/")
-    browser.element("div.user-bar__item>a").click()
-    browser.element("#loginFormLoginEmailLink").click()
-    browser.element("#loginForm [type='email']").should(be.blank).type("test_oz_001@gmail.com")
-    browser.element("#loginForm [type='password']").should(be.blank).type("h34Duz")
-    browser.element("#loginForm [type='submit']").click()
+    main_page = OzMainPage()
+    auth_page = OzAuthorizationPage()
+    search_results_page = OzSearchResultsPage()
+    cart_page = OzCartPage()
+    item_page = OzItemPage()
+    main_page.open()
 
-    browser.element("#top-s").type("Эффективное тестирование")
-    browser.element(by.partial_text("Эффективное тестирование")).click()
-    browser.element(".addtocart-btn").click()
+    main_page.open_authorization_page()
+    auth_page.authorize_user("test_oz_001@gmail.com", "h34Duz")
+    main_page.search_item("Эффективное тестирование")
+    search_results_page.open_item_page("Эффективное тестирование")
+    item_page.add_current_item_to_favorites()
 
-    browser.element(".user-bar__cart").click()
-    browser.element(".checkAll").click()
-    browser.element("button.remove").click()
-    browser.element("button.remove-yes").click()
-
-    browser.element(".goods-table-cell__line_title").should(be.not_.present)
-    browser.element(".deal-form").should(be.not_.present)
+    main_page.open_cart_page()
+    cart_page.should_have_items_added("Эффективное тестирование")
+    cart_page.remove_all_items()
+    cart_page.should_be_empty()
 
 
 def test_favorites_add_item():
-    browser.open("/")
-    browser.element("div.user-bar__item>a").click()
-    browser.element("#loginFormLoginEmailLink").click()
-    browser.element("#loginForm [type='email']").should(be.blank).type("test_oz_001@gmail.com")
-    browser.element("#loginForm [type='password']").should(be.blank).type("h34Duz")
-    browser.element("#loginForm [type='submit']").click()
+    main_page = OzMainPage()
+    auth_page = OzAuthorizationPage()
+    search_results_page = OzSearchResultsPage()
+    favorites_page = OzFavoritesPage()
+    item_page = OzItemPage()
+    main_page.open()
 
-    browser.element("#top-s").type("Эффективное тестирование")
-    browser.element(by.partial_text("Эффективное тестирование")).click()
-    browser.element(by.text("В избранное")).click()
+    main_page.open_authorization_page()
+    auth_page.authorize_user("test_oz_001@gmail.com", "h34Duz")
+    main_page.search_item("Эффективное тестирование")
+    search_results_page.open_item_page("Эффективное тестирование")
+    item_page.add_current_item_to_favorites()
+    main_page.open_favorites_page()
 
-    browser.element(by.text("Избранное")).click()
+    favorites_page.should_have_items_added("Эффективное тестирование")
 
-    browser.element(".product-card__title").should(have.text("Эффективное тестирование программного обеспечения"))
+    favorites_page.remove_all_items()
 
 
 def test_favorites_remove_item():
-    browser.open("/")
-    browser.element("div.user-bar__item>a").click()
-    browser.element("#loginFormLoginEmailLink").click()
-    browser.element("#loginForm [type='email']").should(be.blank).type("test_oz_001@gmail.com")
-    browser.element("#loginForm [type='password']").should(be.blank).type("h34Duz")
-    browser.element("#loginForm [type='submit']").click()
+    main_page = OzMainPage()
+    auth_page = OzAuthorizationPage()
+    search_results_page = OzSearchResultsPage()
+    favorites_page = OzFavoritesPage()
+    item_page = OzItemPage()
+    main_page.open()
 
-    browser.element("#top-s").type("Эффективное тестирование")
-    browser.element(by.partial_text("Эффективное тестирование")).click()
-    browser.element(by.text("В избранное")).click()
+    main_page.open_authorization_page()
+    auth_page.authorize_user("test_oz_001@gmail.com", "h34Duz")
+    main_page.search_item("Эффективное тестирование")
+    search_results_page.open_item_page("Эффективное тестирование")
+    item_page.add_current_item_to_favorites()
+    main_page.open_favorites_page()
 
-    browser.element(by.text("Избранное")).click()
-
-    browser.element("button.like_active").click()
-    browser.element("button.like_active").should(be.not_.present)
-    browser.element("[data-controller='toggle-favorite']").should(
-        have.attribute("data-toggle-favorite-is-added-value", "false"))
+    favorites_page.remove_all_items()
+    favorites_page.should_have_all_items_removed_from_favorites()
