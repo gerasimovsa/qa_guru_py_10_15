@@ -22,9 +22,9 @@ def test_cart_add_item():
     )
     product = Product(label="Эффективное тестирование")
     app.main_page.open()
-
     app.main_page.open_authorization_page()
     app.auth_page.authorize_user(user.email, user.password)
+
     app.main_page.search_item(product.label)
     app.search_result_page.open_item_page(product.label)
     app.item_page.add_current_item_to_cart()
@@ -49,12 +49,12 @@ def test_cart_remove_item():
     )
     product = Product(label="Эффективное тестирование")
     app.main_page.open()
-
     app.main_page.open_authorization_page()
     app.auth_page.authorize_user(user.email, user.password)
+
     app.main_page.search_item(product.label)
     app.search_result_page.open_item_page(product.label)
-    app.item_page.add_current_item_to_favorites()
+    app.item_page.add_current_item_to_cart()
 
     app.main_page.open_cart_page()
     app.cart_page.should_have_items_added(product.label)
