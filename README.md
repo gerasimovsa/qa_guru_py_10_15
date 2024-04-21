@@ -3,7 +3,7 @@
 ----
 > [Link to the OZ.by](https://oz.by//)
 
-![](assets\ozby.PNG)
+![](https://github.com/gerasimovsa/qa_guru_py_10_15/blob/main/assets/ozby.PNG)
 
 ----
 
@@ -69,7 +69,8 @@
 
 > [Link to the Jenkins project](https://jenkins.autotests.cloud/job/10-sergey_ra9-qa_guru_py_10_15_homework)
 
-![](assets\ozby.PNG)
+![](https://github.com/gerasimovsa/qa_guru_py_10_15/blob/main/assets/jenkins_integration.PNG)
+
 ----
 
 #### Build Parameters:
@@ -92,11 +93,11 @@
 
 #### Detailed test reports are generated with logs, HTML, screenshots and video recording
 
-![](assets\allure_reports_integration.PNG)
+![](https://github.com/gerasimovsa/qa_guru_py_10_15/blob/main/assets/allure_reports_integration.PNG)
 
 #### Video recording of launched test in Allure 
 
-![](assets\allure_attachment_video.GIF)
+![](https://github.com/gerasimovsa/qa_guru_py_10_15/blob/main/assets/allure_attachment_video.GIF)
 
 ----
 
@@ -106,7 +107,7 @@
 
 #### Jenkins launches are added into test management system
 
-![](assets\allure_testops_integration.PNG)
+![](https://github.com/gerasimovsa/qa_guru_py_10_15/blob/main/assets/allure_testops_integration.PNG)
 
 ----
 
