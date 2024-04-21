@@ -1,4 +1,4 @@
-# Test Automation Project of OZ.by e-commerce service
+# Test Automation Project | "OZ.by" e-commerce service
 
 ----
 > [Link to the OZ.by](https://oz.by//)
