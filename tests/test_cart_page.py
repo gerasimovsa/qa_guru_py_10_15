@@ -26,7 +26,7 @@ def test_cart_add_item():
     app.main_page.open_authorization_page()
     app.auth_page.authorize_user(user.email, user.password)
     app.main_page.search_item(product.label)
-    app.search_results_page.open_item_page(product.label)
+    app.search_result_page.open_item_page(product.label)
     app.item_page.add_current_item_to_cart()
 
     app.main_page.open_cart_page()
@@ -53,7 +53,7 @@ def test_cart_remove_item():
     app.main_page.open_authorization_page()
     app.auth_page.authorize_user(user.email, user.password)
     app.main_page.search_item(product.label)
-    app.search_results_page.open_item_page(product.label)
+    app.search_result_page.open_item_page(product.label)
     app.item_page.add_current_item_to_favorites()
 
     app.main_page.open_cart_page()
