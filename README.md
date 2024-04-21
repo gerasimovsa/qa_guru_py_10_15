@@ -3,7 +3,7 @@
 ----
 > [Link to the OZ.by](https://oz.by//)
 
-![](https://github.com/gerasimovsa/qa_guru_py_10_15/blob/main/assets/ozby.PNG)
+![](https://github.com/gerasimovsa/qa_guru_py_10_15/blob/main/assets/ozby.png)
 
 ----
 
@@ -69,7 +69,7 @@
 
 > [Link to the Jenkins project](https://jenkins.autotests.cloud/job/10-sergey_ra9-qa_guru_py_10_15_homework)
 
-![](https://github.com/gerasimovsa/qa_guru_py_10_15/blob/main/assets/jenkins_integration.PNG)
+![](https://github.com/gerasimovsa/qa_guru_py_10_15/blob/main/assets/jenkins_integration.png)
 
 ----
 
@@ -83,7 +83,7 @@
 2. Select `Build with Parameters`
 3. Adjust `COMMENT` parameter or leave the default
 4. Select `Build`
-5. After run ends navigate to `'`Allure`'` or `Allure TestOps`
+5. After run ends navigate to `Allure` or `Allure TestOps`
 
 ----
 
@@ -93,11 +93,11 @@
 
 #### Detailed test reports are generated with logs, HTML, screenshots and video recording
 
-![](https://github.com/gerasimovsa/qa_guru_py_10_15/blob/main/assets/allure_reports_integration.PNG)
+![](https://github.com/gerasimovsa/qa_guru_py_10_15/blob/main/assets/allure_reports_integration.png)
 
 #### Video recording of launched test in Allure 
 
-![](https://github.com/gerasimovsa/qa_guru_py_10_15/blob/main/assets/allure_attachment_video.GIF)
+![](https://github.com/gerasimovsa/qa_guru_py_10_15/blob/main/assets/allure_attachment_video.gif)
 
 ----
 
@@ -107,7 +107,7 @@
 
 #### Jenkins launches are added into test management system
 
-![](https://github.com/gerasimovsa/qa_guru_py_10_15/blob/main/assets/allure_testops_integration.PNG)
+![](https://github.com/gerasimovsa/qa_guru_py_10_15/blob/main/assets/allure_testops_integration.png)
 
 ----
 
