@@ -10,6 +10,7 @@ class OzCartPage:
             browser.element("button.remove").click()
         with allure.step("Confirm remove"):
             browser.element("button.remove-yes").click()
+        browser.element("#cart-count").wait_until(be.not_.visible)
         return self
 
     def should_have_items_added(self, *args):

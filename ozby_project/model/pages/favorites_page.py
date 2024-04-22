@@ -8,6 +8,7 @@ class OzFavoritesPage:
         with allure.step("Click on any item's favorite button"):
             for button in browser.all("button.like_active"):
                 button.click()
+        browser.element("#favorite-count").wait_until(be.not_.visible)
 
     @staticmethod
     def should_have_items_added(*args):
